@@ -5,6 +5,7 @@ import { TemplatePreview } from './components/TemplatePreview'
 import { FormBuilder } from './components/FormBuilder'
 import { ExportManager } from './components/ExportManager'
 import LandingPage from './components/LandingPage'
+import AuthModal from './components/AuthModal'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs'
 import { Card } from './components/ui/card'
 import './App.css'
@@ -65,6 +66,8 @@ export interface TemplateField {
 
 function App() {
   const [showLanding, setShowLanding] = useState(true)
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin')
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null)
   const [templateData, setTemplateData] = useState<TemplateData>({})
   const [activeTab, setActiveTab] = useState('gallery')
@@ -100,30 +103,50 @@ function App() {
   }
 
   const handleSignIn = () => {
-    // For now, just skip to the builder
-    // In a real app, this would handle authentication
-    setShowLanding(false)
+    setAuthMode('signin')
+    setShowAuthModal(true)
   }
 
   const handleSignUp = () => {
-    // For now, just skip to the builder
-    // In a real app, this would handle user registration
+    setAuthMode('signup')
+    setShowAuthModal(true)
+  }
+
+  const handleAuthModalClose = () => {
+    setShowAuthModal(false)
+  }
+
+  const handleAuthModeChange = (mode: 'signin' | 'signup') => {
+    setAuthMode(mode)
+  }
+
+  const handleAuthSkip = () => {
+    setShowAuthModal(false)
     setShowLanding(false)
   }
 
   // Show landing page first
   if (showLanding) {
     return (
-      <LandingPage
-        onSkip={handleSkipLanding}
-        onSignIn={handleSignIn}
-        onSignUp={handleSignUp}
-      />
+      <>
+        <LandingPage
+          onSkip={handleSkipLanding}
+          onSignIn={handleSignIn}
+          onSignUp={handleSignUp}
+        />
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={handleAuthModalClose}
+          onSkip={handleAuthSkip}
+          mode={authMode}
+          onModeChange={handleAuthModeChange}
+        />
+      </>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blink-background via-blink-surface to-blink-background">
+    <div className="min-h-screen w-full bg-gradient-to-br from-blink-background via-blink-surface to-blink-background">
       {/* Header */}
       <motion.header 
         initial={{ opacity: 0, y: -20 }}

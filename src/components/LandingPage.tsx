@@ -67,7 +67,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onSkip, onSignIn, onSignUp })
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
       {/* Skip Button */}
       <div className="absolute top-4 right-4 z-50">
         <Button
